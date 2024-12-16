@@ -6,37 +6,39 @@ namespace lab7
 {
     internal class ActiveObjectCollision : BaseObjeсt
     {
-        // Поля для направления движения
-        protected int directionX = 1; // Направление по оси X (1 - вправо, -1 - влево)
-        protected int directionY = 1; // Направление по оси Y (1 - вниз, -1 - вверх)
+        // Направления движения по осям X и Y
+        private int directionX = 1; // 1 - вправо, -1 - влево
+        private int directionY = 1; // 1 - вниз, -1 - вверх
 
         // Конструктор
-        public ActiveObjectCollision(Texture2D texture, Vector2 position, Rectangle bound) : base(texture, position, bound)
+        public ActiveObjectCollision(Texture2D texture, Vector2 position, Rectangle bounds)
+            : base(texture, position, bounds)
         {
         }
 
-        // Метод для перемещения объекта
-        public void MoveObj(GraphicsDevice graphicsDevice, int speed)
+        // Метод для перемещения объекта с проверкой границ экрана
+        private void Move(GraphicsDevice graphicsDevice, int speed)
         {
-            int screenWidth = graphicsDevice.Viewport.Width;
-            int screenHeight = graphicsDevice.Viewport.Height;
+            var screenWidth = graphicsDevice.Viewport.Width;
+            var screenHeight = graphicsDevice.Viewport.Height;
 
-            // Обновляем позицию объекта
+            // Обновление позиции объекта
             Position += new Vector2(directionX * speed, directionY * speed);
 
-            // Проверяем границы экрана и меняем направление движения
+            // Проверка границ экрана по оси X
             if (Position.X + Texture.Width > screenWidth || Position.X < 0)
             {
-                directionX *= -1; // Инвертируем направление по X
+                directionX *= -1; // Меняем направление по оси X
                 Position = new Vector2(
                     Math.Clamp(Position.X, 0, screenWidth - Texture.Width),
                     Position.Y
                 );
             }
 
+            // Проверка границ экрана по оси Y
             if (Position.Y + Texture.Height > screenHeight || Position.Y < 0)
             {
-                directionY *= -1; // Инвертируем направление по Y
+                directionY *= -1; // Меняем направление по оси Y
                 Position = new Vector2(
                     Position.X,
                     Math.Clamp(Position.Y, 0, screenHeight - Texture.Height)
@@ -50,10 +52,10 @@ namespace lab7
             spriteBatch.Draw(Texture, Position, Color.White);
         }
 
-        // Метод обновления объекта
+        // Метод для обновления состояния объекта
         public override void UdpateObject(GraphicsDevice graphicsDevice, GameTime gameTime, short speed)
         {
-            MoveObj(graphicsDevice, speed);
+            Move(graphicsDevice, speed); // Перемещаем объект
         }
     }
 }
