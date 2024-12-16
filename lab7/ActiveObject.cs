@@ -21,13 +21,13 @@ namespace lab7
             }
         }
 
-        // Метод для отрисовки объекта
+        // Метод для отрисовки фона
         public override void Draw(SpriteBatch spriteBatch)
         {
-            // Рисуем основное изображение
+            // Рисуем первое изображение фона
             spriteBatch.Draw(Texture, Position, Color.White);
 
-            // Рисуем второе изображение, следующее за основным, для создания эффекта бесконечного фона
+            // Рисуем второе изображение фона (для создания эффекта бесконечного движения)
             spriteBatch.Draw(Texture, new Vector2(Position.X + Texture.Width, Position.Y), Color.White);
         }
     }
